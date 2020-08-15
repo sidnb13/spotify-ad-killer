@@ -1,0 +1,66 @@
+#!/bin/bash
+
+if [ ! -f $SPOTKILL_PATH/track.log ]; then
+    cd $SPOTKILL_PATH
+    touch track.log
+fi
+
+LOGPATH=$SPOTKILL_PATH/track.log
+
+echo "$(date): Initiated spotikill" >> /Users/sidbaskaran/Desktop/utility-scripts/spotify-ad-killer/track.log
+
+trap "echo $(date): Terminated spotikill >> $LOGPATH" EXIT
+
+while [ true ];
+do
+
+    if ps aux | grep -q spotify;
+    then
+        osascript - "$LOGPATH" <<EOT
+
+            on run argv
+            set lpt to item 1 of argv as text
+
+            if application "Spotify" is running then
+
+                tell application "Spotify"
+
+                    set c to the current track
+                    set tS to round ((duration of c / 1000) mod 60) rounding down
+
+                    set bool to tS <= 30 and name of c is "Advertisement"
+
+                    if tS <= 30 and name of c is "Advertisement" then
+                        tell application "Spotify" to quit
+                        delay 2
+                        tell application "Spotify" to activate
+                        delay 1
+                        tell application "System Events" to set visible of application process "Spotify" to false
+
+                        tell application "Spotify"
+                            next track
+                            play
+                        end tell
+
+                    end if
+
+                    if bool then
+                        set msg to "Current track: "&name of c&""
+                    else
+                        set msg to "Skipped advertisement"
+                    end if
+
+                    do shell script "echo $(date): "&msg&">> "&lpt&""
+
+                end tell
+
+            end if
+
+            end run
+
+EOT
+    fi
+    sleep 2
+done
+
+echo "$(date): Stopped spotikill" >> $LOGPATH
