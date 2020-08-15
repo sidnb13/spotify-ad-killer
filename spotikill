@@ -14,7 +14,7 @@ do
 
     trap "echo $(date): Terminated spotikill >> $LOGPATH" EXIT
 
-    if ps aux | grep -q spotify;
+    if ps aux | grep spotify;
     then
 
         osascript - "$LOGPATH" <<EOT
