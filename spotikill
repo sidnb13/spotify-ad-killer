@@ -1,21 +1,22 @@
 #!/bin/bash
 
-if [ ! -f $SPOTKILL_PATH/track.log ]; then
-    cd $SPOTKILL_PATH
+if [ ! -f $SPOTIKILL_PATH/track.log ]; then
+    cd $SPOTIKILL_PATH
     touch track.log
 fi
 
-LOGPATH=$SPOTKILL_PATH/track.log
+LOGPATH=$SPOTIKILL_PATH/track.log
 
-echo "$(date): Initiated spotikill" >> /Users/sidbaskaran/Desktop/utility-scripts/spotify-ad-killer/track.log
-
-trap "echo $(date): Terminated spotikill >> $LOGPATH" EXIT
+echo "$(date): Initiated spotikill" >> $LOGPATH
 
 while [ true ];
 do
 
+    trap "echo $(date): Terminated spotikill >> $LOGPATH" EXIT
+
     if ps aux | grep -q spotify;
     then
+
         osascript - "$LOGPATH" <<EOT
 
             on run argv
@@ -42,15 +43,10 @@ do
                             play
                         end tell
 
-                    end if
+                        do shell script "echo $(date): Skipped advertisement>> "&lpt&""
+                        do shell script "echo $(date): Current track is "&name of current track&">> "&lpt&""
 
-                    if bool then
-                        set msg to "Current track: "&name of c&""
-                    else
-                        set msg to "Skipped advertisement"
                     end if
-
-                    do shell script "echo $(date): "&msg&">> "&lpt&""
 
                 end tell
 
@@ -60,7 +56,11 @@ do
 
 EOT
     fi
+
+    if [[ $(wc -l <$LOGPATH) -ge 100 ]]
+    then
+        > $LOGPATH
+    fi
+
     sleep 2
 done
-
-echo "$(date): Stopped spotikill" >> $LOGPATH
