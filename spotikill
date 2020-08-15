@@ -32,6 +32,9 @@ do
                     set bool to tS <= 30 and name of c is "Advertisement"
 
                     if tS <= 30 and name of c is "Advertisement" then
+
+                        do shell script "echo $(date): Detected advertisement>> "&lpt&""
+
                         tell application "Spotify" to quit
                         delay 2
                         tell application "Spotify" to activate
