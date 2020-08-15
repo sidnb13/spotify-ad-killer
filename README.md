@@ -4,7 +4,7 @@ A simple and legal way to circumvent Spotify ads on its desktop app. **MacOS onl
 
 ## How it works
 
-A executable shell script runs in an infinite loop. It runs an embedded AppleScript, which in the case Spotify is running, checks if the current track is less than 30 seconds in duration or the name of the track is "Advertisement." If both of these conditions are true, the AppleScript quits Spotify and restarts it.
+A executable shell script runs in an infinite loop. It runs an embedded AppleScript, which in the case Spotify is running, checks if the current track is less than 30 seconds in duration or the name of the track is "Advertisement." If both of these conditions are true, the AppleScript quits Spotify and restarts it. It then skips to the next track to provide a seamless transition.
 
 ## Setup
 
