@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo $1 >> $SPOTIKILL_PATH/blocklist.txt
