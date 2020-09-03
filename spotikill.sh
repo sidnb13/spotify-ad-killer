@@ -1,0 +1,28 @@
+#!/bin/bash
+
+if [ ! -f $SPOTIKILL_PATH/track.log ]; then
+    cd $SPOTIKILL_PATH
+    touch track.log
+fi
+
+LOGPATH=$SPOTIKILL_PATH/track.log
+
+echo "$(date): Initiated spotikill" >> $LOGPATH
+
+while [ true ];
+do
+
+    trap "echo $(date): Terminated spotikill >> $LOGPATH" EXIT
+
+    if ps aux | grep spotify;
+    then
+        osascript $SPOTIKILL_PATH/scripts/adblocker.scpt
+    fi
+
+    if [[ $(wc -l <$LOGPATH) -ge 100 ]]
+    then
+        > $LOGPATH
+    fi
+
+    sleep 2
+done
