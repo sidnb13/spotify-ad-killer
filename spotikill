@@ -16,7 +16,7 @@ do
 
     if ps aux | grep spotify;
     then
-        osascript $SPOTIKILL_PATH/scripts/adblocker.scpt
+        osascript $SPOTIKILL_PATH/scripts/adblocker.applescript
     fi
 
     if [[ $(wc -l <$LOGPATH) -ge 100 ]]

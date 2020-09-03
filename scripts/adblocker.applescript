@@ -16,7 +16,7 @@ tell application "Spotify"
         copy ln as string to the end of blocklist 
     end repeat
 
-    set isAd to blocklist contains the name of c as string and ts <= 30
+    set isAd to blocklist contains the name of c as string
 
     if isAd then
 

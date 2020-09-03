@@ -1,30 +1,28 @@
 #!/bin/bash
 
-while getopts ":lakn:" opt; do
+while getopts ":la:kd:" opt; do
     case ${opt} in
         a )
             adname=$OPTARG
             echo "$adname" >> $SPOTIKILL_PATH/blocklist.txt
-            exit 0
             ;;
         l )
             cat "$SPOTIKILL_PATH/blocklist.txt"
-            exit 0
             ;;
         k )
             if ps aux | grep spotikill; then
                 pkill -f spotikill.sh
             fi
-            exit 0
             ;;
-        n )
-            nohup spotikill.sh &
-            exit 0
+        d )
+            file=$SPOTIKILL_PATH/blocklist.txt
+            awk "!/$OPTARG/" $file > temp && mv temp $file
             ;;
         \? )
             echo "Invalid Option: -$OPTARG" 1>&2
             exit 1
             ;;
     esac
-    shift $((OPTIND -1))
 done
+
+shift $((OPTIND -1))

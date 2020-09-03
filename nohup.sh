@@ -1,0 +1,1 @@
+nohup spotikill.sh &
