@@ -1,38 +1,42 @@
 set masterpath to system attribute "SPOTIKILL_PATH"
 set lpt to ""&masterpath&"/track.log"
 
-tell application "Spotify"
+if application "Spotify" is running then
 
-    set c to the current track
+    tell application "Spotify"
 
-    set tS to round ((duration of c / 1000) mod 60) rounding down
+        set c to the current track
 
-    set bfPath to ""&masterpath&"/blocklist.txt"
-    set lns to paragraphs of (read POSIX file bfPath)
+        set tS to round ((duration of c / 1000) mod 60) rounding down
 
-    set blocklist to {}
+        set bfPath to ""&masterpath&"/blocklist.txt"
+        set lns to paragraphs of (read POSIX file bfPath)
 
-    repeat with ln in lns
-        copy ln as string to the end of blocklist 
-    end repeat
+        set blocklist to {}
 
-    set isAd to blocklist contains the name of c as string
+        repeat with ln in lns
+            copy ln as string to the end of blocklist 
+        end repeat
 
-    if isAd then
+        set isAd to blocklist contains the name of c as string
 
-        do shell script "echo $(date): Detected advertisement>> "&lpt&""
+        if isAd then
 
-        tell application "Spotify" to quit
-        delay 2
-        tell application "Spotify" to activate
-        delay 2
-        tell application "System Events" to set visible of application process "Spotify" to false
+            do shell script "echo $(date): Detected advertisement>> "&lpt&""
 
-        tell application "Spotify" to play
+            tell application "Spotify" to quit
+            delay 2
+            tell application "Spotify" to activate
+            delay 2
+            tell application "System Events" to set visible of application process "Spotify" to false
+
+            tell application "Spotify" to play
+            
+            do shell script "echo $(date): Skipped advertisement>> "&lpt&""
+            do shell script "echo $(date): Current track is "&name of current track&">> "&lpt&""
         
-        do shell script "echo $(date): Skipped advertisement>> "&lpt&""
-        do shell script "echo $(date): Current track is "&name of current track&">> "&lpt&""
-    
-    end if
+        end if
+
+end if
 
 end tell
